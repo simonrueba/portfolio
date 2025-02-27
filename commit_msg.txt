@@ -1,0 +1,6 @@
+[Cursor] Update contact form verification
+
+- Change Turnstile widget to interaction-only mode
+- Remove visible container styling
+- Improve loading message
+- Clean up verification UI
