@@ -11,7 +11,12 @@ export async function POST(request: Request) {
     const { name, email, message, token } = await request.json()
 
     // Log the received data (excluding token for security)
-    console.log('Received form data:', { name, email, messageLength: message?.length })
+    console.log('Received form data:', { 
+      name, 
+      email, 
+      messageLength: message?.length,
+      tokenLength: token?.length 
+    })
 
     // Basic validation
     if (!name || !email || !message || !token) {
@@ -29,19 +34,33 @@ export async function POST(request: Request) {
 
     // Verify Turnstile token
     console.log('Starting Turnstile verification...')
-    const validationResponse = await validateTurnstileToken({
-      token,
-      secretKey: process.env.TURNSTILE_SECRET_KEY!,
-      idempotencyKey: uuidv4(),
-      // Enable sandbox mode in development
-      sandbox: process.env.NODE_ENV === 'development'
+    console.log('Environment:', {
+      isDev: process.env.NODE_ENV === 'development',
+      hasTurnstileKey: Boolean(process.env.TURNSTILE_SECRET_KEY)
     })
-    console.log('Turnstile validation response:', validationResponse)
 
-    if (!validationResponse.success) {
+    try {
+      const validationResponse = await validateTurnstileToken({
+        token,
+        secretKey: process.env.TURNSTILE_SECRET_KEY!,
+        idempotencyKey: uuidv4(),
+        // Enable sandbox mode in development
+        sandbox: process.env.NODE_ENV === 'development'
+      })
+      console.log('Turnstile validation response:', validationResponse)
+
+      if (!validationResponse.success) {
+        console.error('Turnstile validation failed:', validationResponse)
+        return NextResponse.json(
+          { error: 'Invalid CAPTCHA verification' },
+          { status: 400 }
+        )
+      }
+    } catch (error) {
+      console.error('Error during Turnstile validation:', error)
       return NextResponse.json(
-        { error: 'Invalid CAPTCHA' },
-        { status: 400 }
+        { error: 'Failed to validate CAPTCHA' },
+        { status: 500 }
       )
     }
 

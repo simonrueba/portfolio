@@ -1,6 +1,3 @@
-[Cursor] Improve Turnstile integration
+[Cursor] Simplify contact form button text
 
-- Switch to next-turnstile package for better integration
-- Update API route to use validateTurnstileToken
-- Add proper TypeScript types
-- Enable sandbox mode in development
+- Change submit button text to 'Send'

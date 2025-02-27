@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { Turnstile } from "next-turnstile"
+import { useTheme } from 'next-themes'
 
 interface FormData {
   name: string
@@ -20,6 +21,7 @@ export default function Contact() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const formRef = useRef<HTMLFormElement>(null)
+  const { theme } = useTheme()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -148,18 +150,28 @@ export default function Contact() {
             <div className="space-y-4">
               <Turnstile
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
-                onVerify={(token) => setFormData(prev => ({ ...prev, token }))}
-                onError={() => {
+                onVerify={(token) => {
+                  console.log('Turnstile verification successful')
+                  setFormData(prev => ({ ...prev, token }))
+                }}
+                onError={(error) => {
+                  console.error('Turnstile error:', error)
                   setStatus('error')
                   setErrorMessage('Security check failed. Please try again.')
                 }}
                 onExpire={() => {
+                  console.log('Turnstile token expired')
                   setFormData(prev => ({ ...prev, token: '' }))
                   setErrorMessage('Security check expired. Please verify again.')
                 }}
+                onLoad={() => {
+                  console.log('Turnstile loaded')
+                }}
                 className="flex justify-center"
-                theme="light"
+                theme={theme === 'dark' ? 'dark' : 'light'}
                 appearance="interaction-only"
+                retry="auto"
+                refreshExpired="auto"
               />
             </div>
             
@@ -180,7 +192,7 @@ export default function Contact() {
               disabled={status === 'loading' || !formData.token}
               className="w-full sm:w-auto min-h-[44px] px-6 py-3 text-base sm:text-sm font-mono border rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {status === 'loading' ? 'Sending...' : !formData.token ? 'Please complete the verification' : 'Send Message'}
+              {status === 'loading' ? 'Sending...' : 'Send'}
             </button>
           </form>
         </div>
