@@ -20,7 +20,6 @@ const MatrixBackground = () => {
   const [isLoading, setIsLoading] = useState(true)
   const lastPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
   const { theme } = useTheme()
-  const [error, setError] = useState<string | null>(null)
   const sessionRef = useRef<ort.InferenceSession | null>(null)
 
   // Load the model
@@ -34,9 +33,8 @@ const MatrixBackground = () => {
         });
         sessionRef.current = session;
         setIsLoading(false);
-      } catch (error) {
-        console.error('Failed to load model:', error)
-        setError('Failed to load MNIST model')
+      } catch (err) {
+        console.error('Failed to load model:', err)
         setIsLoading(false)
       }
     }
@@ -151,9 +149,8 @@ const MatrixBackground = () => {
         allProbabilities: probabilities
       })
 
-    } catch (error) {
-      console.error('Prediction error:', error)
-      setError('Failed to make prediction')
+    } catch (err) {
+      console.error('Prediction error:', err)
     }
   }
 

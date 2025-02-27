@@ -15,11 +15,30 @@ export default function About() {
           <h2 className="text-xl font-mono mb-6">About Me</h2>
           <div className="space-y-4 text-base leading-relaxed">
             <p>
-              Hi and thanks for stopping by! My name is <strong>Simon Rüba</strong>. I'm a Software Developer and Machine Learning Engineer specializing in building intelligent systems and modern web applications.
+              Hi and thanks for stopping by! My name is <strong>Simon Rüba</strong>. I&apos;m a Software Developer and Machine Learning Engineer based in Innsbruck, Austria. I enjoy working on intelligent systems and web applications, with particular interest in AI and infrastructure improvements.
             </p>
             <p>
-              I work at the intersection of software development and machine learning, focusing on creating practical AI solutions and robust web applications. My expertise spans both traditional software development and cutting-edge AI technologies.
+              With a background in Computer Science from the University of Innsbruck, I&apos;m fortunate to work at the intersection of software development and machine learning. I strive to contribute to practical AI solutions while maintaining robust and efficient systems.
             </p>
+            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <h3 className="font-mono text-foreground/60 mb-2">Languages</h3>
+                <ul className="space-y-1">
+                  <li>German (Native)</li>
+                  <li>English (Fluent)</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-mono text-foreground/60 mb-2">Personal Qualities</h3>
+                <ul className="space-y-1">
+                  <li>Rational Thinker</li>
+                  <li>Team-oriented</li>
+                  <li>Flexible</li>
+                  <li>Responsible</li>
+                  <li>Determined</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -28,59 +47,54 @@ export default function About() {
           <div className="space-y-8">
             <div>
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="text-base font-mono">Software Developer</h3>
-                <span className="text-sm text-foreground/60">2020–Present</span>
+                <h3 className="text-base font-mono">Head of IT and Software</h3>
+                <span className="text-sm text-foreground/60">2023–Present</span>
               </div>
-              <p className="text-sm text-foreground/60 mb-3">Company Name · Berlin, DE</p>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Led development of machine learning infrastructure</li>
-                <li>Implemented distributed training pipelines</li>
-                <li>Reduced model training time by 40%</li>
+              <p className="text-sm text-foreground/60 mb-3">Heliotherm</p>
+              <ul className="list-disc list-inside space-y-2 text-sm">
+                <li>Developing IT strategy and technology roadmap</li>
+                <li>Contributing to AWS AI Adoption Project, helping improve error detection</li>
+                <li>Working on infrastructure modernization initiatives</li>
+                <li>Implementing security measures and managing virtual environments</li>
+                <li>Collaborating with and supporting the IT team</li>
               </ul>
             </div>
 
             <div>
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="text-base font-mono">ML Engineer</h3>
-                <span className="text-sm text-foreground/60">2018–2020</span>
+                <h3 className="text-base font-mono">Software Developer</h3>
+                <span className="text-sm text-foreground/60">2023</span>
               </div>
-              <p className="text-sm text-foreground/60 mb-3">Previous Company · Munich, DE</p>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Developed computer vision models for object detection</li>
-                <li>Built data processing pipelines</li>
-                <li>Improved model accuracy by 25%</li>
+              <p className="text-sm text-foreground/60 mb-3">Accemic Technologies GmbH</p>
+              <ul className="list-disc list-inside space-y-2 text-sm">
+                <li>Contributed to CEDARtools® development for embedded systems</li>
+                <li>Worked on code coverage and system monitoring features</li>
+                <li>Developed solutions using C#, Java, C, and JavaScript</li>
+                <li>Participated in software testing improvements</li>
               </ul>
             </div>
           </div>
         </section>
 
-        <section id="research">
-          <h2 className="text-xl font-mono mb-6">Research</h2>
+        <section id="education">
+          <h2 className="text-xl font-mono mb-6">Education</h2>
           <div className="space-y-8">
             <div>
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="text-base font-mono">MNIST Classifier</h3>
-                <span className="text-sm text-foreground/60">2023</span>
+                <h3 className="text-base font-mono">MSc Computer Science</h3>
               </div>
-              <p className="text-sm text-foreground/60 mb-3">Interactive digit recognition using ONNX.js and TensorFlow</p>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Built a real-time handwritten digit recognition system</li>
-                <li>Implemented client-side inference using ONNX.js</li>
-                <li>Achieved 98% accuracy on test set</li>
-              </ul>
+              <p className="text-sm text-foreground/60 mb-3">University of Innsbruck</p>
+              <p className="text-sm mb-2">Research: Mammogram Quality Assessment using Deep Learning</p>
+              <p className="text-sm text-foreground/60">Focus areas: Machine Learning, Computer Vision, Information Security, Data Engineering</p>
             </div>
 
             <div>
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="text-base font-mono">Portfolio Website</h3>
-                <span className="text-sm text-foreground/60">2024</span>
+                <h3 className="text-base font-mono">BSc Computer Science</h3>
               </div>
-              <p className="text-sm text-foreground/60 mb-3">Modern web application built with Next.js and TypeScript</p>
-              <ul className="list-disc list-inside space-y-1 text-sm">
-                <li>Designed and implemented a responsive, accessible interface</li>
-                <li>Optimized performance with static generation and image optimization</li>
-                <li>Integrated dark mode and smooth animations</li>
-              </ul>
+              <p className="text-sm text-foreground/60 mb-3">University of Innsbruck</p>
+              <p className="text-sm mb-2">Research: Medical Image Segmentation</p>
+              <p className="text-sm text-foreground/60">Focus areas: Algorithms, Machine Learning, Computer Vision, Software Design</p>
             </div>
           </div>
         </section>
@@ -89,42 +103,22 @@ export default function About() {
           <h2 className="text-xl font-mono mb-6">Technical Skills</h2>
           <ul className="list-none space-y-4 text-sm">
             <li>
-              <span className="font-mono text-foreground/60 inline-block w-24">Languages:</span>
-              Python, TypeScript, C++, SQL
+              <span className="font-mono text-foreground/60 inline-block w-36">Programming:</span>
+              Python, TypeScript, JavaScript, C#, Java, C, SQL
             </li>
             <li>
-              <span className="font-mono text-foreground/60 inline-block w-24">ML & AI:</span>
-              PyTorch, TensorFlow, Computer Vision, NLP
+              <span className="font-mono text-foreground/60 inline-block w-36">Machine Learning:</span>
+              PyTorch, TensorFlow, Computer Vision, Deep Learning, MLOps
             </li>
             <li>
-              <span className="font-mono text-foreground/60 inline-block w-24">Web:</span>
-              React, Next.js, Node.js, GraphQL
+              <span className="font-mono text-foreground/60 inline-block w-36">Web Development:</span>
+              React, Next.js, Node.js, GraphQL, REST APIs
             </li>
             <li>
-              <span className="font-mono text-foreground/60 inline-block w-24">Tools:</span>
-              Git, Docker, AWS, Linux
+              <span className="font-mono text-foreground/60 inline-block w-36">Infrastructure:</span>
+              Git, Docker, AWS, Linux, CI/CD, VMware
             </li>
           </ul>
-        </section>
-
-        <section id="contact" className="pb-16">
-          <h2 className="text-xl font-mono mb-6">Contact</h2>
-          <p className="mb-4">
-            Feel free to get in touch by sending me an email at{' '}
-            <a 
-              href="mailto:contact@simonruba.com" 
-              className="text-foreground hover:text-foreground/80"
-            >
-              contact@simonruba.com
-            </a>
-          </p>
-          <blockquote className="border-l-2 pl-4 text-sm">
-            <p className="space-y-1">
-              Simon Rüba<br />
-              Software Developer & ML Engineer<br />
-              Berlin, Germany
-            </p>
-          </blockquote>
         </section>
       </motion.div>
     </div>

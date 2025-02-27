@@ -1,11 +1,21 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 
 declare global {
   interface Window {
-    turnstile: any
+    turnstile: {
+      render: (element: HTMLElement, config: TurnstileConfig) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    }
   }
+}
+
+interface TurnstileConfig {
+  sitekey: string;
+  callback: (token: string) => void;
+  'refresh-expired': () => void;
 }
 
 export default function Contact() {
@@ -16,44 +26,9 @@ export default function Contact() {
   })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [token, setToken] = useState<string | null>(null)
-  const turnstileRef = useRef<HTMLDivElement>(null)
-  const widgetId = useRef<string | null>(null)
-
-  useEffect(() => {
-    // Load the Turnstile script
-    const script = document.createElement('script')
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-    script.async = true
-    script.defer = true
-    document.body.appendChild(script)
-
-    return () => {
-      // Cleanup
-      if (widgetId.current) {
-        window.turnstile?.remove(widgetId.current)
-      }
-      document.body.removeChild(script)
-    }
-  }, [])
-
-  useEffect(() => {
-    // Reset Turnstile when form submission is successful
-    if (status === 'success') {
-      window.turnstile?.reset(widgetId.current)
-      setToken(null)
-    }
-  }, [status])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!token) {
-      setStatus('error')
-      setErrorMessage('Please complete the CAPTCHA')
-      return
-    }
-
     setStatus('loading')
     setErrorMessage('')
 
@@ -63,10 +38,7 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          ...formData,
-          token
-        }),
+        body: JSON.stringify(formData),
       })
 
       const data = await response.json()
@@ -83,32 +55,6 @@ export default function Contact() {
     }
   }
 
-  useEffect(() => {
-    // Initialize Turnstile when the script is loaded
-    const initTurnstile = () => {
-      if (window.turnstile && turnstileRef.current) {
-        widgetId.current = window.turnstile.render(turnstileRef.current, {
-          sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!,
-          callback: (token: string) => {
-            setToken(token)
-          },
-          'refresh-expired': () => {
-            setToken(null)
-          }
-        })
-      }
-    }
-
-    if (window.turnstile) {
-      initTurnstile()
-    } else {
-      document.addEventListener('turnstile:ready', initTurnstile)
-      return () => {
-        document.removeEventListener('turnstile:ready', initTurnstile)
-      }
-    }
-  }, [])
-
   return (
     <div className="container max-w-3xl mx-auto px-4 sm:px-6">
       <section id="contact" className="py-12 sm:py-16">
@@ -116,7 +62,7 @@ export default function Contact() {
         <div className="space-y-8 sm:space-y-12">
           <div>
             <p className="mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
-              I'm always interested in hearing about new opportunities, collaborations, or just having a chat about technology and machine learning. Feel free to get in touch by sending me an email at{' '}
+              I&apos;m always interested in hearing about new opportunities, collaborations, or just having a chat about technology and machine learning. Feel free to get in touch by sending me an email at{' '}
               <a 
                 href="mailto:simonrueba@gmail.com" 
                 className="text-foreground hover:text-foreground/80 inline-block"
@@ -177,8 +123,6 @@ export default function Contact() {
                   disabled={status === 'loading'}
                 />
               </div>
-              
-              <div ref={turnstileRef} className="flex justify-center sm:justify-start" />
             </div>
             
             {status === 'error' && (
@@ -195,7 +139,7 @@ export default function Contact() {
 
             <button
               type="submit"
-              disabled={status === 'loading' || !token}
+              disabled={status === 'loading'}
               className="w-full sm:w-auto min-h-[44px] px-6 py-3 text-base sm:text-sm font-mono border rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {status === 'loading' ? 'Sending...' : 'Send Message'}

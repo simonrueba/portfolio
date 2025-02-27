@@ -2,8 +2,6 @@
 
 import Hero from '@/components/Hero'
 import About from '@/components/About'
-import Career from '@/components/Career'
-import Skills from '@/components/Skills'
 import Contact from '@/components/Contact'
 import Script from 'next/script'
 
@@ -42,8 +40,6 @@ export default function HomePage() {
       <main className="flex min-h-screen flex-col">
         <Hero />
         <About />
-        <Career />
-        <Skills />
         <Contact />
       </main>
     </>

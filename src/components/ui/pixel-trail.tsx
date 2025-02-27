@@ -13,6 +13,18 @@ interface PixelTrailProps {
   pixelClassName?: string
 }
 
+interface PixelDotProps {
+  id: string
+  size: number
+  fadeDuration: number
+  delay: number
+  className?: string
+}
+
+type ExtendedHTMLDivElement = HTMLDivElement & {
+  __animatePixel?: () => void
+}
+
 const PixelTrail: React.FC<PixelTrailProps> = ({
   pixelSize = 20,
   fadeDuration = 500,
@@ -21,7 +33,7 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   pixelClassName,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const dimensions = useDimensions(containerRef)
+  const dimensions = useDimensions(containerRef as React.RefObject<HTMLElement>)
   const trailId = useRef(uuidv4())
 
   const handleMouseMove = useCallback(
@@ -34,10 +46,10 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
 
       const pixelElement = document.getElementById(
         `${trailId.current}-pixel-${x}-${y}`
-      )
-      if (pixelElement) {
-        const animatePixel = (pixelElement as any).__animatePixel
-        if (animatePixel) animatePixel()
+      ) as ExtendedHTMLDivElement | null
+      
+      if (pixelElement?.__animatePixel) {
+        pixelElement.__animatePixel()
       }
     },
     [pixelSize]
@@ -79,14 +91,6 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   )
 }
 
-interface PixelDotProps {
-  id: string
-  size: number
-  fadeDuration: number
-  delay: number
-  className?: string
-}
-
 const PixelDot: React.FC<PixelDotProps> = React.memo(
   ({ id, size, fadeDuration, delay, className }) => {
     const controls = useAnimationControls()
@@ -96,13 +100,12 @@ const PixelDot: React.FC<PixelDotProps> = React.memo(
         opacity: [1, 0],
         transition: { duration: fadeDuration / 1000, delay: delay / 1000 },
       })
-    }, [])
+    }, [controls, fadeDuration, delay])
 
-    // Attach the animatePixel function to the DOM element
     const ref = useCallback(
       (node: HTMLDivElement | null) => {
         if (node) {
-          ;(node as any).__animatePixel = animatePixel
+          (node as ExtendedHTMLDivElement).__animatePixel = animatePixel
         }
       },
       [animatePixel]
