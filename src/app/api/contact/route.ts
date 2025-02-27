@@ -1,33 +1,9 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { validateTurnstileToken } from 'next-turnstile'
+import { v4 as uuidv4 } from 'uuid'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-
-async function verifyTurnstileToken(token: string) {
-  try {
-    console.log('Verifying Turnstile token...')
-    const response = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret: process.env.TURNSTILE_SECRET_KEY,
-          response: token,
-        }),
-      }
-    )
-
-    const data = await response.json()
-    console.log('Turnstile verification response:', data)
-    return data.success
-  } catch (error) {
-    console.error('Error verifying Turnstile token:', error)
-    throw error
-  }
-}
 
 export async function POST(request: Request) {
   try {
@@ -53,10 +29,16 @@ export async function POST(request: Request) {
 
     // Verify Turnstile token
     console.log('Starting Turnstile verification...')
-    const isValid = await verifyTurnstileToken(token)
-    console.log('Turnstile verification result:', isValid)
-    
-    if (!isValid) {
+    const validationResponse = await validateTurnstileToken({
+      token,
+      secretKey: process.env.TURNSTILE_SECRET_KEY!,
+      idempotencyKey: uuidv4(),
+      // Enable sandbox mode in development
+      sandbox: process.env.NODE_ENV === 'development'
+    })
+    console.log('Turnstile validation response:', validationResponse)
+
+    if (!validationResponse.success) {
       return NextResponse.json(
         { error: 'Invalid CAPTCHA' },
         { status: 400 }

@@ -1,6 +1,6 @@
-[Cursor] Update contact form verification
+[Cursor] Improve Turnstile integration
 
-- Change Turnstile widget to interaction-only mode
-- Remove visible container styling
-- Improve loading message
-- Clean up verification UI
+- Switch to next-turnstile package for better integration
+- Update API route to use validateTurnstileToken
+- Add proper TypeScript types
+- Enable sandbox mode in development

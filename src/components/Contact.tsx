@@ -1,29 +1,17 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
+import { Turnstile } from "next-turnstile"
 
-declare global {
-  interface Window {
-    turnstile: {
-      render: (element: HTMLElement | string, config: TurnstileConfig) => string;
-      reset: (widgetId: string) => void;
-      remove: (widgetId: string) => void;
-    };
-    onTurnstileLoad?: () => void;
-  }
-}
-
-interface TurnstileConfig {
-  sitekey: string;
-  callback: (token: string) => void;
-  'refresh-expired': 'auto' | 'manual' | 'never';
-  onExpire?: () => void;
-  theme?: 'light' | 'dark' | 'auto';
-  appearance?: 'always' | 'execute' | 'interaction-only';
+interface FormData {
+  name: string
+  email: string
+  message: string
+  token: string
 }
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     message: '',
@@ -31,86 +19,24 @@ export default function Contact() {
   })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [isTurnstileLoading, setIsTurnstileLoading] = useState(true)
-  const turnstileRef = useRef<string>('')
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    // Load Turnstile
-    console.log('Starting to load Turnstile script...')
-    const script = document.createElement('script')
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad'
-    script.async = true
-    script.defer = true
-    
-    // Define the callback function
-    window.onTurnstileLoad = () => {
-      console.log('Turnstile script loaded via callback')
-      setIsTurnstileLoading(false)
-      initializeTurnstile()
-    }
-
-    script.onload = () => {
-      console.log('Turnstile script onload event fired')
-    }
-
-    script.onerror = (error) => {
-      console.error('Error loading Turnstile script:', error)
-      setIsTurnstileLoading(false)
-    }
-
-    document.body.appendChild(script)
-
-    return () => {
-      document.body.removeChild(script)
-      delete window.onTurnstileLoad
-    }
-  }, [])
-
-  const initializeTurnstile = () => {
-    if (!window.turnstile) {
-      console.error('Turnstile not loaded')
-      return
-    }
-
-    if (!containerRef.current) {
-      console.error('Container ref not ready')
-      return
-    }
-
-    const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
-    console.log('Initializing Turnstile with site key:', siteKey)
-    
-    if (!siteKey) {
-      console.error('Missing NEXT_PUBLIC_TURNSTILE_SITE_KEY environment variable')
-      return
-    }
-
-    try {
-      turnstileRef.current = window.turnstile.render(containerRef.current, {
-        sitekey: siteKey,
-        callback: (token: string) => {
-          console.log('Turnstile callback received')
-          setFormData(prev => ({ ...prev, token }))
-        },
-        'refresh-expired': 'auto',
-        onExpire: () => {
-          console.log('Turnstile token expired')
-          setFormData(prev => ({ ...prev, token: '' }))
-        },
-        theme: 'light',
-        appearance: 'interaction-only',
-      })
-      console.log('Turnstile widget rendered with ID:', turnstileRef.current)
-    } catch (error) {
-      console.error('Error rendering Turnstile widget:', error)
-    }
-  }
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('loading')
     setErrorMessage('')
+
+    if (!formRef.current) {
+      setStatus('error')
+      setErrorMessage('Form not found')
+      return
+    }
+
+    if (!formData.token) {
+      setStatus('error')
+      setErrorMessage('Please verify you are not a robot')
+      return
+    }
 
     try {
       console.log('Form submission started')
@@ -138,11 +64,6 @@ export default function Contact() {
 
       setStatus('success')
       setFormData({ name: '', email: '', message: '', token: '' })
-      
-      // Reset Turnstile after successful submission
-      if (window.turnstile && turnstileRef.current) {
-        window.turnstile.reset(turnstileRef.current)
-      }
     } catch (error) {
       console.error('Form submission error:', error)
       setStatus('error')
@@ -175,7 +96,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-mono mb-2">
@@ -224,17 +145,22 @@ export default function Contact() {
               </div>
             </div>
             
-            {/* Turnstile container */}
             <div className="space-y-4">
-              <div 
-                ref={containerRef} 
+              <Turnstile
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                onVerify={(token) => setFormData(prev => ({ ...prev, token }))}
+                onError={() => {
+                  setStatus('error')
+                  setErrorMessage('Security check failed. Please try again.')
+                }}
+                onExpire={() => {
+                  setFormData(prev => ({ ...prev, token: '' }))
+                  setErrorMessage('Security check expired. Please verify again.')
+                }}
                 className="flex justify-center"
+                theme="light"
+                appearance="interaction-only"
               />
-              {isTurnstileLoading && (
-                <div className="text-sm text-foreground/60 text-center">
-                  Loading verification...
-                </div>
-              )}
             </div>
             
             {status === 'error' && (
