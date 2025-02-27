@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="flex flex-col items-center gap-3 text-sm font-mono text-foreground/40">
         <div className="flex items-center space-x-3">
           <a 
-            href="https://github.com/simonruba" 
+            href="https://github.com/simonrueba" 
             target="_blank" 
             rel="noopener noreferrer"
             className="hover:text-foreground transition-colors"
@@ -13,21 +13,12 @@ export default function Footer() {
           </a>
           <span>/</span>
           <a 
-            href="https://linkedin.com/in/simonruba" 
+            href="https://www.linkedin.com/in/simonrueba/?originalSubdomain=at" 
             target="_blank" 
             rel="noopener noreferrer"
             className="hover:text-foreground transition-colors"
           >
             linkedin
-          </a>
-          <span>/</span>
-          <a 
-            href="https://twitter.com/simonruba" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-foreground transition-colors"
-          >
-            twitter
           </a>
         </div>
         <div>

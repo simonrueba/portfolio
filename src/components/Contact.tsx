@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 declare global {
   interface Window {
     turnstile: {
-      render: (element: HTMLElement, config: TurnstileConfig) => string;
+      render: (element: HTMLElement | string, config: TurnstileConfig) => string;
       reset: (widgetId: string) => void;
       remove: (widgetId: string) => void;
     }
@@ -22,10 +22,46 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    token: ''
   })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const turnstileRef = useRef<string>('')
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Load Turnstile
+    const script = document.createElement('script')
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
+    script.async = true
+    script.defer = true
+    document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (window.turnstile && containerRef.current) {
+      turnstileRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '',
+        callback: (token: string) => {
+          setFormData(prev => ({ ...prev, token }))
+        },
+        'refresh-expired': () => {
+          setFormData(prev => ({ ...prev, token: '' }))
+        }
+      })
+    }
+
+    return () => {
+      if (window.turnstile && turnstileRef.current) {
+        window.turnstile.remove(turnstileRef.current)
+      }
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,7 +84,12 @@ export default function Contact() {
       }
 
       setStatus('success')
-      setFormData({ name: '', email: '', message: '' })
+      setFormData({ name: '', email: '', message: '', token: '' })
+      
+      // Reset Turnstile after successful submission
+      if (window.turnstile && turnstileRef.current) {
+        window.turnstile.reset(turnstileRef.current)
+      }
     } catch (error) {
       setStatus('error')
       setErrorMessage(error instanceof Error ? error.message : 'Failed to send message')
@@ -56,7 +97,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="container max-w-3xl mx-auto px-4 sm:px-6">
+    <div className="container max-w-3xl mx-auto px-6 sm:px-4">
       <section id="contact" className="py-12 sm:py-16">
         <h2 className="text-lg sm:text-xl font-mono mb-6 sm:mb-8">Contact</h2>
         <div className="space-y-8 sm:space-y-12">
@@ -125,6 +166,9 @@ export default function Contact() {
               </div>
             </div>
             
+            {/* Turnstile container */}
+            <div ref={containerRef} className="flex justify-center" />
+            
             {status === 'error' && (
               <div className="text-sm text-red-500 p-3 bg-red-50 dark:bg-red-950/50 rounded-md">
                 {errorMessage}
@@ -139,7 +183,7 @@ export default function Contact() {
 
             <button
               type="submit"
-              disabled={status === 'loading'}
+              disabled={status === 'loading' || !formData.token}
               className="w-full sm:w-auto min-h-[44px] px-6 py-3 text-base sm:text-sm font-mono border rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {status === 'loading' ? 'Sending...' : 'Send Message'}

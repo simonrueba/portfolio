@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 export default function About() {
   return (
-    <div className="container max-w-3xl mx-auto px-4">
+    <div className="container max-w-3xl mx-auto px-6 sm:px-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -20,25 +20,6 @@ export default function About() {
             <p>
               With a background in Computer Science from the University of Innsbruck, I&apos;m fortunate to work at the intersection of software development and machine learning. I strive to contribute to practical AI solutions while maintaining robust and efficient systems.
             </p>
-            <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <h3 className="font-mono text-foreground/60 mb-2">Languages</h3>
-                <ul className="space-y-1">
-                  <li>German (Native)</li>
-                  <li>English (Fluent)</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-mono text-foreground/60 mb-2">Personal Qualities</h3>
-                <ul className="space-y-1">
-                  <li>Rational Thinker</li>
-                  <li>Team-oriented</li>
-                  <li>Flexible</li>
-                  <li>Responsible</li>
-                  <li>Determined</li>
-                </ul>
-              </div>
-            </div>
           </div>
         </section>
 
