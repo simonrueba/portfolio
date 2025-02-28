@@ -44,7 +44,7 @@ export default function About() {
             <div>
               <div className="flex justify-between items-baseline mb-2">
                 <h3 className="text-base font-mono">Software Developer</h3>
-                <span className="text-sm text-foreground/60">2023</span>
+                <span className="text-sm text-foreground/60">2018–2023</span>
               </div>
               <p className="text-sm text-foreground/60 mb-3">Accemic Technologies GmbH</p>
               <ul className="list-disc list-inside space-y-2 text-sm">
@@ -63,19 +63,32 @@ export default function About() {
             <div>
               <div className="flex justify-between items-baseline mb-2">
                 <h3 className="text-base font-mono">MSc Computer Science</h3>
+                <span className="text-sm text-foreground/60">2023</span>
               </div>
-              <p className="text-sm text-foreground/60 mb-3">University of Innsbruck</p>
-              <p className="text-sm mb-2">Research: Mammogram Quality Assessment using Deep Learning</p>
-              <p className="text-sm text-foreground/60">Focus areas: Machine Learning, Computer Vision, Information Security, Data Engineering</p>
+              <p className="text-sm text-foreground/60 mb-3">University of Innsbruck, Austria</p>
+              <div className="space-y-2 text-sm">
+                <p className="font-medium">Focus: Artificial Intelligence and Machine Learning</p>
+                <p className="font-medium">Thesis: Automated PGMI Scale Classification for Mammogram Quality Assessment using ConvNeXt Ensemble</p>
+                <div>
+                  <p className="text-foreground/60 mb-1">Relevant Coursework:</p>
+                  <p className="leading-relaxed">Machine Learning, Computer Vision, Robotics, Information Security, Network Security, Semantic Web, Data Engineering, Natural Language Processing, Software Design, Development Processes, Formal Languages, Automata Theory</p>
+                </div>
+              </div>
             </div>
 
             <div>
               <div className="flex justify-between items-baseline mb-2">
                 <h3 className="text-base font-mono">BSc Computer Science</h3>
+                <span className="text-sm text-foreground/60">2020</span>
               </div>
-              <p className="text-sm text-foreground/60 mb-3">University of Innsbruck</p>
-              <p className="text-sm mb-2">Research: Medical Image Segmentation</p>
-              <p className="text-sm text-foreground/60">Focus areas: Algorithms, Machine Learning, Computer Vision, Software Design</p>
+              <p className="text-sm text-foreground/60 mb-3">University of Innsbruck, Austria</p>
+              <div className="space-y-2 text-sm">
+                <p className="font-medium">Thesis: Automatic Semantic Kidney and Kidney Tumor Segmentation</p>
+                <div>
+                  <p className="text-foreground/60 mb-1">Relevant Coursework:</p>
+                  <p className="leading-relaxed">Algorithms, Data Structures, Operating Systems, Databases, Software Design, Functional Programming, Project Management, Machine Learning, AI, Computer Graphics, Autonomous Systems, Internet Technology, Cryptology, Discrete Math, Analysis, Logic, Computer Vision, Information Theory</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

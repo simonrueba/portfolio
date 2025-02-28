@@ -1,3 +1,4 @@
-[Cursor] Simplify contact form button text
+[Cursor] Update experience and education details
 
-- Change submit button text to 'Send'
+- Update Accemic Technologies employment period to 2018-2023
+- Add AI and Machine Learning focus to MSc degree
