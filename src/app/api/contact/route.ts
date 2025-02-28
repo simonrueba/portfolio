@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     // Send email using Resend
     console.log('Sending email via Resend...')
     const emailResult = await resend.emails.send({
-      from: 'Contact Form <answers_and_8o@icloud.com>',
+      from: 'Contact Form <onboarding@resend.dev>',
       to: 'answers_and_8o@icloud.com',
       subject: `New Contact Form Message from ${name}`,
       text: `

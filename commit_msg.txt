@@ -1,4 +1,4 @@
-[Cursor] Fix Resend email configuration
+[Cursor] Update Resend from address
 
-- Update from and to email addresses to use verified email
-- Fix replyTo property name in email options
+- Use Resend onboarding domain for from address
+- Keep iCloud email as to address
