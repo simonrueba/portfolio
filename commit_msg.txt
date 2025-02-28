@@ -1,4 +1,3 @@
-[Cursor] Update experience and education details
+[Cursor] Add top margin to About section
 
-- Update Accemic Technologies employment period to 2018-2023
-- Add AI and Machine Learning focus to MSc degree
+- Add padding-top to About Me section for better spacing

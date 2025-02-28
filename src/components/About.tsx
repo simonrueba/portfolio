@@ -11,7 +11,7 @@ export default function About() {
         transition={{ duration: 0.5 }}
         className="space-y-16"
       >
-        <section id="about">
+        <section id="about" className="pt-12 sm:pt-16">
           <h2 className="text-xl font-mono mb-6">About Me</h2>
           <div className="space-y-4 text-base leading-relaxed">
             <p>
