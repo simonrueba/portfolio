@@ -17,7 +17,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60 pt-safe">
       <div className="container max-w-2xl mx-auto px-6 sm:px-4 py-4">
         <nav className="flex items-center justify-between">
           <Link href="/" className="font-mono text-base" onClick={closeMenu}>

@@ -71,7 +71,9 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
         <link rel="canonical" href="https://simonrueba.com" />
       </head>
       <body className="font-sans antialiased">
